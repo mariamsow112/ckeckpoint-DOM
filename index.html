@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier d'Achat</title>
+    <style>
+        /* Styles de base pour le panier */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .cart {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .item-info img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .item-info h4 {
+            margin: 0;
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .quantity button {
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+        }
+
+        .quantity input {
+            width: 50px;
+            text-align: center;
+            margin: 0 5px;
+        }
+
+        .heart {
+            cursor: pointer;
+            font-size: 24px;
+            color: grey;
+            margin-right: 10px;
+        }
+
+        .heart.liked {
+            color: red;
+        }
+
+        .remove {
+            cursor: pointer;
+            color: red;
+            font-weight: bold;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cart">
+        <div class="cart-item" data-price="15.99">
+            <div class="item-info">
+                <img src="img1.jpeg" alt="Article 1">
+                <h4>Article 1</h4>
+            </div>
+            <div class="item-actions">
+                <div class="quantity">
+                    <button class="decrease">-</button>
+                    <input type="text" value="1" readonly>
+                    <button class="increase">+</button>
+                </div>
+                <div class="heart">❤️</div>
+                <div class="remove">X</div>
+            </div>
+        </div>
+
+        <div class="cart-item" data-price="25.50">
+            <div class="item-info">
+                <img src="img2.jpeg" alt="Article 2">
+                <h4>Article 2</h4>
+            </div>
+            <div class="item-actions">
+                <div class="quantity">
+                    <button class="decrease">-</button>
+                    <input type="text" value="1" readonly>
+                    <button class="increase">+</button>
+                </div>
+                <div class="heart">❤️</div>
+                <div class="remove">X</div>
+            </div>
+        </div>
+
+        <div class="total">Total: 41.49 €</div>
+    </div>
+
+    <script>
+        // JavaScript pour gérer les interactions
+
+        // Fonction pour mettre à jour le total
+        function updateTotal() {
+            const cartItems = document.querySelectorAll('.cart-item');
+            let total = 0;
+
+            cartItems.forEach(item => {
+                const price = parseFloat(item.getAttribute('data-price'));
+                const quantity = parseInt(item.querySelector('input').value);
+                total += price * quantity;
+            });
+
+            document.querySelector('.total').innerText = `Total: ${total.toFixed(2)} €`;
+        }
+
+        // Gestion des boutons "+" et "-"
+        document.querySelectorAll('.increase').forEach(button => {
+            button.addEventListener('click', () => {
+                const input = button.parentNode.querySelector('input');
+                input.value = parseInt(input.value) + 1;
+                updateTotal();
+            });
+        });
+
+        document.querySelectorAll('.decrease').forEach(button => {
+            button.addEventListener('click', () => {
+                const input = button.parentNode.querySelector('input');
+                if (parseInt(input.value) > 1) {
+                    input.value = parseInt(input.value) - 1;
+                    updateTotal();
+                }
+            });
+        });
+
+        // Gestion du bouton de suppression
+        document.querySelectorAll('.remove').forEach(button => {
+            button.addEventListener('click', () => {
+                button.parentNode.parentNode.remove();
+                updateTotal();
+            });
+        });
+
+        // Gestion du bouton cœur
+        document.querySelectorAll('.heart').forEach(heart => {
+            heart.addEventListener('click', () => {
+                heart.classList.toggle('liked');
+            });
+        });
+    </script>
+
+</body>
+</html>
